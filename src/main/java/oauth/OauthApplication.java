@@ -23,7 +23,7 @@ public class OauthApplication extends WebSecurityConfigurerAdapter {
 		SpringApplication.run(OauthApplication.class, args);
 	}
 
-	@GetMapping
+	@GetMapping("/user")
 	public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
 		return Collections.singletonMap("name", principal.getAttribute("name"));
 	}
@@ -32,16 +32,11 @@ public class OauthApplication extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formater:off
 		http
-			.authorizeRequests(
-				a -> a.antMatchers("/", "/error", "/webjars/**").permitAll().anyRequest().authenticated())
-			.logout(l -> l
-					.logoutSuccessUrl("/").permitAll())
-			.csrf(c -> c
-					.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+			.authorizeRequests(a -> a.antMatchers("/", "/error", "/webjars/**").permitAll().anyRequest().authenticated())
 			.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-				.oauth2Login()
-				;
+			.csrf(c -> c.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+			.logout(l -> l.logoutSuccessUrl("/").permitAll())
+			.oauth2Login();
 		// @formater:on
 	}
-
 }
