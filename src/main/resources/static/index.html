@@ -24,10 +24,18 @@
 		<div>
 			<button onClick="logout()" class="btn btn-primary">Logout</button>
 		</div>
+		test: <span id="test"></span>
 	</div>
 	<script type="text/javascript">
+		// ajaxでjsonを返す
 		$.get("/user", function (data) {
 			$("#user").html(data.name);
+			$(".unauthenticated").hide()
+			$(".authenticated").show()
+		});
+		// ajaxでjsonを返す
+		$.get("/test", function (data) {
+			$("#test").html(data);
 			$(".unauthenticated").hide()
 			$(".authenticated").show()
 		});
